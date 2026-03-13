@@ -1,0 +1,45 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+scrape_configs:
+  # Prometheus itself
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # SmartRoad Backend API
+  - job_name: 'smartroad-backend'
+    static_configs:
+      - targets: ['backend:5000']
+    metrics_path: '/api/metrics'
+    scrape_interval: 30s
+
+  # SmartRoad AI Services
+  - job_name: 'smartroad-ai'
+    static_configs:
+      - targets: ['ai-services:8000']
+    metrics_path: '/metrics'
+    scrape_interval: 30s
+
+  # Node Exporter (if added for system metrics)
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    scrape_interval: 30s
+
+  # MongoDB Exporter (if added)
+  - job_name: 'mongodb-exporter'
+    static_configs:
+      - targets: ['mongodb-exporter:9216']
+    scrape_interval: 30s
+
+  # Redis Exporter (if added)
+  - job_name: 'redis-exporter'
+    static_configs:
+      - targets: ['redis-exporter:9121']
+    scrape_interval: 30s

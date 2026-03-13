@@ -1,0 +1,51 @@
+{
+  "expo": {
+    "name": "SmartRoad",
+    "slug": "smartroad",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#2ecc71"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app needs location access to provide traffic data and navigation.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs location access to provide real-time traffic monitoring.",
+        "NSCameraUsageDescription": "This app needs camera access to report road issues.",
+        "NSMotionUsageDescription": "This app needs motion sensors for accident detection."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#2ecc71"
+      },
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "CAMERA",
+        "RECORD_AUDIO",
+        "VIBRATE",
+        "ACCESS_NETWORK_STATE",
+        "INTERNET"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-camera",
+      "expo-location",
+      "expo-sensors",
+      "expo-notifications"
+    ]
+  }
+}
