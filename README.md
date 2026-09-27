@@ -1,429 +1,192 @@
-# SmartRoad – AI Smart Traffic, Road Safety & Emergency Response System
+# Traffic AI System
 
-A comprehensive full-stack platform that leverages AI, real-time data, and community participation to create intelligent traffic management, road safety monitoring, and emergency response systems.
+A full-stack traffic intelligence and road-safety platform combining a React Native mobile application, Node.js backend, and Python/FastAPI AI services.
 
-## 🚀 Features
+## Overview
 
-### 📱 Mobile Application
-- **React Native (Expo) + TypeScript** cross-platform mobile app
-- Real-time traffic monitoring and navigation
-- Road issue reporting with photo verification
-- Accident detection using device sensors
-- Emergency alert system with green corridor
-- Civic rewards and coupon system
-- User leaderboard and gamification
+Traffic AI System brings together traffic monitoring, vehicle detection, traffic prediction, traffic signal optimization, accident detection, road-issue reporting, emergency alerts, and emergency-corridor workflows in one multi-service project.
 
-### 🖥️ Backend API
-- **Node.js + Express** RESTful API
-- **MongoDB** for data storage
-- **Socket.IO** for real-time communication
-- JWT authentication and authorization
-- Rate limiting and security middleware
-- Comprehensive API documentation
+## Implemented capabilities
 
-### 🤖 AI Services
-- **Python FastAPI** microservices
-- **Traffic Prediction** using ML models
-- **Vehicle Detection** with YOLOv8
-- **Signal Optimization** algorithms
-- **Emergency Green Corridor** system
-- Real-time analytics and insights
+- React Native and Expo mobile client
+- Node.js and Express REST API
+- MongoDB-backed application data
+- Socket.IO real-time events
+- JWT-based authentication flow
+- Traffic prediction service using a Random Forest regressor
+- Vehicle detection service using YOLOv8
+- Traffic signal optimization service
+- Accident detection workflow in the mobile application
+- Emergency alert and emergency-corridor services
+- Road-issue reporting and community verification flows
+- Docker Compose development environment
 
-### 🚦 Traffic Intelligence
-- Crowd-sourced traffic sensing
-- AI congestion prediction
-- Smart navigation with A* pathfinding
-- Dynamic traffic signal optimization
-- Road hazard detection and alerts
+## Architecture
 
-### 🆘 Emergency Response
-- Sensor-based accident detection
-- Automatic emergency contact notification
-- Green corridor for ambulances
-- Real-time emergency coordination
-- Hospital route optimization
-
-### 🏆 Community Rewards
-- Civic points system
-- Partner coupons and rewards
-- User verification system
-- Leaderboard and badges
-- Anti-spam protection
-
-## 📋 System Requirements
-
-- Node.js 18+
-- Python 3.11+
-- MongoDB 7.0+
-- Redis 7.0+
-- Docker & Docker Compose
-- Expo CLI (for mobile development)
-
-## 🛠️ Installation & Setup
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/your-username/smartroad.git
-cd smartroad
+```mermaid
+flowchart LR
+    M[React Native / Expo Mobile App] --> B[Node.js / Express API]
+    B --> DB[(MongoDB)]
+    B --> R[(Redis)]
+    B <--> S[Socket.IO Events]
+    B --> A[FastAPI AI Services]
+    A --> T[Traffic Prediction]
+    A --> V[YOLOv8 Vehicle Detection]
+    A --> O[Signal Optimization]
+    A --> E[Emergency Corridor]
+    M --> AD[Accident Detection Workflow]
 ```
 
-### 2. Environment Configuration
+## Technology stack
+
+- **Mobile:** React Native, Expo, TypeScript
+- **Backend:** Node.js, Express, Socket.IO
+- **AI services:** Python, FastAPI, scikit-learn, pandas, NumPy, Ultralytics YOLO
+- **Data:** MongoDB, Redis
+- **Deployment:** Docker and Docker Compose
+- **Security foundations:** Helmet, rate limiting, JWT authentication, environment-based configuration
+
+## Repository structure
+
+```text
+traffic_ai_system/
+├── ai/                  # FastAPI services and traffic intelligence modules
+├── backend/             # Express API, routes, controllers, and middleware
+├── mobile/              # React Native / Expo application
+├── docker/              # Dockerfiles, Compose, Nginx, and monitoring config
+├── README.md
+├── .gitignore
+└── package-lock.json
+```
+
+## Setup
+
+### Requirements
+
+- Node.js 18 or newer
+- Python 3.11 or newer
+- MongoDB 7 or newer, or Docker
+- Redis 7 or newer, or Docker
+- Expo tooling for mobile development
+
+### Environment configuration
+
+Copy the example configuration files and replace placeholders locally. Do not commit real passwords, API keys, JWT secrets, or cloud credentials.
+
 ```bash
-# Copy environment files
 cp backend/.env.example backend/.env
-cp ai/.env.example ai/.env
-
-# Edit environment variables
-nano backend/.env
-nano ai/.env
+cp docker/.env.example docker/.env
 ```
 
-### 3. Docker Deployment (Recommended)
-```bash
-# Navigate to docker directory
-cd docker
+### Backend
 
-# Start all services
-docker-compose up -d
-
-# Check service status
-docker-compose ps
-
-# View logs
-docker-compose logs -f
-```
-
-### 4. Manual Setup
-
-#### Backend Setup
 ```bash
 cd backend
 npm install
 npm run dev
 ```
 
-#### AI Services Setup
+### AI services
+
 ```bash
 cd ai
+python -m venv .venv
+# Activate the environment using the command for your operating system.
 pip install -r requirements.txt
 python main.py
 ```
 
-#### Mobile App Setup
+### Mobile application
+
 ```bash
 cd mobile
 npm install
 npx expo start
 ```
 
-## 📊 API Documentation
+For a physical device, configure the mobile API base URL to point to the development machine rather than `localhost` on the phone itself.
 
-### Backend API Endpoints
+### Docker
 
-#### User Management
-- `POST /api/users/register` - Register new user
-- `POST /api/users/login` - User login
-- `GET /api/users/profile` - Get user profile
-- `PUT /api/users/profile` - Update user profile
-
-#### Traffic Data
-- `POST /api/traffic/update` - Update traffic data
-- `GET /api/traffic/congestion` - Get congestion data
-- `GET /api/traffic/heatmap` - Get traffic heatmap
-- `GET /api/traffic/route` - Get optimal route
-
-#### Road Issues
-- `POST /api/issues/report` - Report road issue
-- `POST /api/issues/verify` - Verify road issue
-- `GET /api/issues/nearby` - Get nearby issues
-
-#### Emergency Services
-- `POST /api/emergency/alert` - Trigger emergency alert
-- `POST /api/emergency/corridor` - Create green corridor
-- `GET /api/emergency/active` - Get active emergencies
-
-#### Rewards System
-- `GET /api/rewards/available` - Get available rewards
-- `POST /api/rewards/redeem` - Redeem reward
-- `GET /api/rewards/my-coupons` - Get user coupons
-
-### AI Services Endpoints
-
-#### Traffic Prediction
-- `POST /api/v1/traffic/predict` - Predict traffic conditions
-- `POST /api/v1/traffic/congestion-analysis` - Analyze congestion
-
-#### Vehicle Detection
-- `POST /api/v1/vehicles/detect` - Detect vehicles in image
-- `POST /api/v1/vehicles/count` - Count vehicles by lane
-
-#### Signal Optimization
-- `POST /api/v1/signals/optimize` - Optimize signal timings
-- `GET /api/v1/signals/{id}/status` - Get signal status
-
-#### Emergency Corridor
-- `POST /api/v1/emergency/corridor` - Create emergency corridor
-- `PUT /api/v1/emergency/corridor/{id}/update` - Update corridor
-
-## 🏗️ Architecture
-
-### System Components
-
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Mobile App    │    │   Backend API   │    │   AI Services   │
-│  (React Native) │◄──►│   (Node.js)     │◄──►│  (Python/FastAPI)│
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │                       │
-         └───────────────────────┼───────────────────────┘
-                                 │
-                    ┌─────────────────┐
-                    │   Databases     │
-                    │ MongoDB + Redis │
-                    └─────────────────┘
-```
-
-### Data Flow
-
-1. **Mobile App** sends traffic data to **Backend API**
-2. **Backend API** processes and stores data in **MongoDB**
-3. **AI Services** analyze data and provide predictions
-4. **Real-time updates** sent via **Socket.IO**
-5. **Emergency alerts** trigger **Green Corridor** system
-
-## 🔧 Configuration
-
-### Environment Variables
-
-#### Backend (.env)
-```env
-MONGODB_URI=mongodb://localhost:27017/smartroad
-PORT=5000
-JWT_SECRET=your-super-secret-jwt-key
-CLIENT_URL=http://localhost:3000
-REDIS_URL=redis://localhost:6379
-```
-
-#### AI Services (.env)
-```env
-MONGODB_URI=mongodb://localhost:27017/smartroad_ai
-REDIS_URL=redis://localhost:6379
-MODEL_PATH=/app/models
-LOG_LEVEL=INFO
-```
-
-## 📱 Mobile App Features
-
-### User Registration & Authentication
-- Phone number verification with OTP
-- Emergency contact setup
-- Vehicle type selection
-- Civic points tracking
-
-### Real-time Navigation
-- AI-powered route optimization
-- Traffic-aware navigation
-- Hazard alerts and rerouting
-- ETA calculation
-
-### Road Issue Reporting
-- Photo-based issue reporting
-- GPS location tagging
-- Community verification system
-- Issue status tracking
-
-### Emergency Response
-- Automatic accident detection
-- One-tap emergency alert
-- Green corridor coordination
-- Emergency contact notification
-
-### Rewards System
-- Points for contributions
-- Partner coupons redemption
-- Leaderboard ranking
-- Achievement badges
-
-## 🤖 AI Models & Algorithms
-
-### Traffic Prediction
-- **Random Forest Regressor** for speed prediction
-- Time-series analysis for pattern recognition
-- Weather and event-based adjustments
-- Real-time model updates
-
-### Vehicle Detection
-- **YOLOv8** for object detection
-- Multi-class vehicle classification
-- Real-time processing capability
-- Traffic flow analysis
-
-### Signal Optimization
-- **Priority-weighted timing** algorithms
-- Reinforcement learning for adaptation
-- Multi-intersection coordination
-- Emergency vehicle preemption
-
-### Emergency Corridor
-- **A* pathfinding** for optimal routes
-- Real-time signal coordination
-- Progress tracking system
-- Automatic corridor restoration
-
-## 📈 Monitoring & Analytics
-
-### Prometheus Metrics
-- API response times
-- Traffic data volume
-- AI model performance
-- System resource usage
-
-### Grafana Dashboards
-- Real-time traffic monitoring
-- System performance metrics
-- Emergency response statistics
-- User engagement analytics
-
-### Logging
-- Structured logging with correlation IDs
-- Error tracking and alerting
-- Performance monitoring
-- Audit trail maintenance
-
-## 🔒 Security Features
-
-### Authentication & Authorization
-- JWT-based authentication
-- Role-based access control
-- API rate limiting
-- Input validation and sanitization
-
-### Data Protection
-- Encrypted data transmission
-- Sensitive data masking
-- GDPR compliance
-- Regular security audits
-
-### API Security
-- CORS configuration
-- SQL injection prevention
-- XSS protection
-- CSRF protection
-
-## 🚀 Deployment
-
-### Production Deployment
 ```bash
-# Build and deploy with Docker
-docker-compose -f docker/docker-compose.prod.yml up -d
-
-# Scale services as needed
-docker-compose up -d --scale backend=3 --scale ai-services=2
+cd docker
+docker compose --env-file .env up -d
 ```
 
-### Environment Setup
-- **Development**: Local Docker setup
-- **Staging**: Cloud-based testing environment
-- **Production**: Kubernetes cluster deployment
+The Compose file is intended for local development and demonstration. Review exposed ports and credentials before using it outside a local environment.
 
-## 🧪 Testing
+## Key API areas
 
-### Backend Tests
-```bash
-cd backend
-npm test
-npm run test:coverage
-```
+### Backend API
 
-### AI Services Tests
-```bash
-cd ai
-python -m pytest tests/
-python -m pytest --cov=services
-```
+- `/api/users` — registration, login, and profiles
+- `/api/traffic` — traffic data and traffic operations
+- `/api/issues` — road issue reporting and verification
+- `/api/emergency` — emergency alerts and coordination
+- `/api/rewards` — civic rewards and coupons
+- `/api/health` — backend health status
 
-### Mobile App Tests
-```bash
-cd mobile
-npm test
-npm run test:e2e
-```
+### AI API
 
-## 📊 Performance Metrics
+- `POST /api/v1/traffic/predict`
+- `POST /api/v1/traffic/congestion-analysis`
+- `POST /api/v1/vehicles/detect`
+- `POST /api/v1/vehicles/count`
+- `POST /api/v1/signals/optimize`
+- `POST /api/v1/emergency/corridor`
+- `PUT /api/v1/emergency/corridor/{corridor_id}/update`
+- `DELETE /api/v1/emergency/corridor/{corridor_id}`
+- `GET /health`
 
-### System Performance
-- **API Response Time**: <200ms (95th percentile)
-- **AI Processing Time**: <2s for predictions
-- **Database Query Time**: <50ms average
-- **Mobile App Load Time**: <3s
+## Accident detection
 
-### Traffic Handling
-- **Concurrent Users**: 10,000+
-- **API Requests/sec**: 1,000+
-- **Data Processing**: 1M+ records/hour
-- **Real-time Updates**: <100ms latency
+Accident detection is part of the project’s road-safety workflow and is implemented in the mobile application. The project should be evaluated on a real device with the required permissions, sensor behavior, backend connectivity, and emergency-notification configuration.
 
-## 🤝 Contributing
+The repository does not claim that the system has been validated for every device, road condition, or production emergency-response scenario.
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+## Prototype and fallback behavior
 
-### Development Guidelines
-- Follow coding standards
-- Write comprehensive tests
-- Update documentation
-- Use semantic versioning
+Some services include fallback or simulation paths for development when model files, historical data, cameras, or databases are unavailable. These paths help the application remain testable, but their generated values are not real-world measurements or benchmark results.
 
-## 📝 License
+In particular:
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- Vehicle-count fallback responses can be simulated.
+- Traffic prediction falls back to rule-based values when a model is unavailable.
+- Some analytics methods remain prototype-level.
+- Performance and accuracy should be measured independently before being reported as results.
 
-## 👥 Team
+## Testing
 
-- **Backend Development**: Node.js/Express specialists
-- **AI/ML Engineering**: Python/PyTorch experts
-- **Mobile Development**: React Native developers
-- **DevOps**: Docker/Kubernetes engineers
-- **UI/UX Design**: Mobile app designers
+The repository contains service code and application structure for testing. Run the test commands that are present in the relevant package configuration, and document any local infrastructure required for integration tests.
 
-## 📞 Support
+Before presenting benchmark numbers, record the dataset, hardware, test procedure, and results.
 
-- **Documentation**: [Wiki](https://github.com/your-username/smartroad/wiki)
-- **Issues**: [GitHub Issues](https://github.com/your-username/smartroad/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/your-username/smartroad/discussions)
-- **Email**: support@smartroad.com
+## Security configuration
 
-## 🗺️ Roadmap
+- Keep `.env` files local and untracked.
+- Replace all Docker development passwords before shared or deployed use.
+- Use strong, unique JWT and database secrets.
+- Restrict CORS origins outside local development.
+- Do not expose MongoDB, Redis, Grafana, or monitoring ports publicly without access controls.
+- Review uploaded-file handling and authentication before production deployment.
 
-### Phase 1 (Current)
-- ✅ Core platform development
-- ✅ AI services integration
-- ✅ Mobile app deployment
-- ✅ Emergency response system
+## Known limitations
 
-### Phase 2 (Next 3 months)
-- 🔄 Advanced ML models
-- 🔄 IoT sensor integration
-- 🔄 City-wide deployment
-- 🔄 Analytics dashboard
+- Some AI and analytics paths are prototypes or use fallbacks.
+- Mobile networking requires environment-specific API configuration.
+- Docker Compose defaults are designed for local development.
+- Production-scale performance, model accuracy, and emergency-response reliability are not claimed without reproducible measurements.
+- The accident-detection workflow still requires device-level and end-to-end validation for each target deployment.
 
-### Phase 3 (Next 6 months)
-- 📋 Multi-city expansion
-- 📋 Public transport integration
-- 📋 Weather integration
-- 📋 Predictive maintenance
+## Future improvements
 
-## 🙏 Acknowledgments
+- Add reproducible model evaluation and benchmark reports.
+- Improve device and sensor compatibility testing for accident detection.
+- Add automated integration tests across mobile, backend, and AI services.
+- Replace broad development CORS settings with environment-specific allowlists.
+- Improve model lifecycle and artifact management.
+- Consolidate the remaining historical setup and status documents into `docs/`.
 
-- OpenStreetMap for mapping data
-- YOLO/Ultralytics for object detection
-- MongoDB for database technology
-- React Native for mobile framework
-- Open-source community contributors
+## License
 
----
-
-**SmartRoad** - Making roads smarter, safer, and more efficient through AI and community collaboration.
+No repository-level license file was identified during the audit. Confirm licensing before redistribution or commercial use.
