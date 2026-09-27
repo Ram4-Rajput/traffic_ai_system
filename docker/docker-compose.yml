@@ -1,15 +1,14 @@
 version: '3.8'
 
 services:
-  # MongoDB Database
   mongodb:
     image: mongo:7.0
     container_name: smartroad-mongodb
     restart: unless-stopped
     environment:
-      MONGO_INITDB_ROOT_USERNAME: admin
-      MONGO_INITDB_ROOT_PASSWORD: smartroad2024
-      MONGO_INITDB_DATABASE: smartroad
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:?Set MONGO_INITDB_ROOT_USERNAME in docker/.env}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:?Set MONGO_INITDB_ROOT_PASSWORD in docker/.env}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE:-smartroad}
     ports:
       - "27017:27017"
     volumes:
@@ -18,7 +17,6 @@ services:
     networks:
       - smartroad-network
 
-  # Redis for caching and session management
   redis:
     image: redis:7.2-alpine
     container_name: smartroad-redis
@@ -30,7 +28,6 @@ services:
     networks:
       - smartroad-network
 
-  # Node.js Backend API
   backend:
     build:
       context: ../backend
@@ -38,14 +35,14 @@ services:
     container_name: smartroad-backend
     restart: unless-stopped
     environment:
-      NODE_ENV: production
-      PORT: 5000
-      MONGODB_URI: mongodb://admin:smartroad2024@mongodb:27017/smartroad?authSource=admin
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: ${BACKEND_PORT:-5000}
+      MONGODB_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/${MONGO_INITDB_DATABASE:-smartroad}?authSource=admin
       REDIS_URL: redis://redis:6379
-      JWT_SECRET: your-super-secret-jwt-key-change-this-in-production
-      CLIENT_URL: http://localhost:3000
+      JWT_SECRET: ${JWT_SECRET:?Set JWT_SECRET in docker/.env}
+      CLIENT_URL: ${CLIENT_URL:-http://localhost:3000}
     ports:
-      - "5000:5000"
+      - "${BACKEND_PORT:-5000}:5000"
     depends_on:
       - mongodb
       - redis
@@ -54,7 +51,6 @@ services:
     networks:
       - smartroad-network
 
-  # AI Services (FastAPI)
   ai-services:
     build:
       context: ../ai
@@ -63,10 +59,10 @@ services:
     restart: unless-stopped
     environment:
       PYTHONPATH: /app
-      MONGODB_URI: mongodb://admin:smartroad2024@mongodb:27017/smartroad_ai?authSource=admin
+      MONGODB_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/smartroad_ai?authSource=admin
       REDIS_URL: redis://redis:6379
     ports:
-      - "8000:8000"
+      - "${AI_PORT:-8000}:8000"
     depends_on:
       - mongodb
       - redis
@@ -76,14 +72,13 @@ services:
     networks:
       - smartroad-network
 
-  # Nginx Reverse Proxy
   nginx:
     image: nginx:1.25-alpine
     container_name: smartroad-nginx
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/ssl:/etc/nginx/ssl
@@ -94,13 +89,12 @@ services:
     networks:
       - smartroad-network
 
-  # Monitoring - Prometheus
   prometheus:
     image: prom/prometheus:latest
     container_name: smartroad-prometheus
     restart: unless-stopped
     ports:
-      - "9090:9090"
+      - "${PROMETHEUS_PORT:-9090}:9090"
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
@@ -112,15 +106,14 @@ services:
     networks:
       - smartroad-network
 
-  # Monitoring - Grafana
   grafana:
     image: grafana/grafana:latest
     container_name: smartroad-grafana
     restart: unless-stopped
     ports:
-      - "3001:3000"
+      - "${GRAFANA_PORT:-3001}:3000"
     environment:
-      GF_SECURITY_ADMIN_PASSWORD: smartroad2024
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?Set GRAFANA_ADMIN_PASSWORD in docker/.env}
     volumes:
       - grafana_data:/var/lib/grafana
       - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
